@@ -1,0 +1,581 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% How to use writeLaTeX: 
+%
+% You edit the source code here on the left, and the preview on the
+% right shows you the result within a few seconds.
+%
+% Bookmark this page and share the URL with your co-authors. They can
+% edit at the same time!
+%
+% You can upload figures, bibliographies, custom classes and
+% styles using the files menu.
+%
+% If you're new to LaTeX, the wikibook is a great place to start:
+% http://en.wikibooks.org/wiki/LaTeX
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{tufte-handout}
+
+%\geometry{showframe}% for debugging purposes -- displays the margins
+
+\usepackage{amsmath}
+
+% Set up the images/graphics package
+\usepackage{graphicx}
+\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+\graphicspath{{graphics/}}
+
+\title{SOC385L -- Lab 1: Intro to Stata Coding}
+\author{TA: Nicholas Reith}
+\date{22 January 2016}  % if the \date{} command is left out, the current date will be used
+
+% The following package makes prettier tables.  We're all about the bling!
+\usepackage{booktabs}
+
+% The units package provides nice, non-stacked fractions and better spacing
+% for units.
+\usepackage{units}
+
+% The fancyvrb package lets us customize the formatting of verbatim
+% environments.  We use a slightly smaller font.
+\usepackage{fancyvrb}
+\fvset{fontsize=\normalsize}
+
+% Small sections of multiple columns
+\usepackage{multicol}
+
+% Provides paragraphs of dummy text
+\usepackage{lipsum}
+
+% These commands are used to pretty-print LaTeX commands
+\newcommand{\doccmd}[1]{\texttt{\textbackslash#1}}% command name -- adds backslash automatically
+\newcommand{\docopt}[1]{\ensuremath{\langle}\textrm{\textit{#1}}\ensuremath{\rangle}}% optional command argument
+\newcommand{\docarg}[1]{\textrm{\textit{#1}}}% (required) command argument
+\newenvironment{docspec}{\begin{quote}\noindent}{\end{quote}}% command specification environment
+\newcommand{\docenv}[1]{\textsf{#1}}% environment name
+\newcommand{\docpkg}[1]{\texttt{#1}}% package name
+\newcommand{\doccls}[1]{\texttt{#1}}% document class name
+\newcommand{\docclsopt}[1]{\texttt{#1}}% document class option name
+
+%Nicholas' Packages
+\usepackage{verbatim}
+\usepackage{soul}
+\sethlcolor{lightgray}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\begin{document}
+
+\maketitle% this prints the handout title, author, and date
+
+\begin{abstract}
+\noindent This lab assignment serves as an introduction to basic data cleaning, coding, and analysis in Stata, It may be a refresher for students already familiar with Stata basics.
+\end{abstract}
+
+%\printclassoptions
+
+\noindent These lab notes will cover:
+\begin{enumerate}
+	\item Importing data,
+	\item Naming, labeling, and organizing variables,
+	\item Looking for missing data,
+	\item Summarizing and Tabulating data (Univariate Statistics), and
+	\item Recoding, dummy coding, and transforming variables.
+\end{enumerate}
+
+\section{Stata Orientation \protect\sidenote{NOTE: It is highly recommended that you use version 14 or, at a minimum, version 13 of Stata.}}
+\subsection{Main Interface}
+\begin{figure}
+   \includegraphics[width=\linewidth]{stata_interface}
+\caption{The Stata main interface window.\newline
+{\bf a. Menu bar:} Do things manually with point-and-click.)\newline
+{\bf b. Command line:} Enter code one line at a time.\newline
+{\bf c. Command history:} A history of previous commands.\newline
+{\bf d. Results window:} Output appears here.\newline
+{\bf e. Variables window:} Lists all variables in dataset.\newline
+{\bf f. Properties window:} More info on highlighted variable.}
+\label{fig:fig1}
+\end{figure}
+
+\newpage
+\subsection{Other Windows}
+\begin{figure}
+   \includegraphics[width=\linewidth]{other_windows}
+\caption{Additional Stata Windows.\newline
+{\bf g. Data Browser/Editor:} View dataset.\newline
+{\bf h. DO File Editor:} Edit and run Stata code.\newline
+{\bf i. LOG File Viewer:} A record of logged output.}
+\label{fig:fig2}
+ \end{figure}
+
+\subsection{Folders and Files}
+\begin{itemize}
+\item {\bf Working directory:} Directory where all output is saved by default. Can be viewed with {\tt \hl{pwd}} (print working directory) command, or changed with {\tt \hl{cd}} (change directory) command.
+\item {\bf LOG files:} {\tt \hl{.smcl}} or {\tt \hl{.txt}} files that record any logged output.
+\item {\bf DO files:} {\tt \hl{.do}} files that save and run Stata code.
+\item {\bf DTA files:} {\tt \hl{.dta}} files are Stata data files.
+\end{itemize}
+
+\section{Stata Coding Tips}
+
+\begin{itemize}
+\item Always code in a {\tt \hl{.do}} file so that you can save and edit your code.
+\item If you are stuck, look for help:
+	\begin{itemize}
+	\item Type {\tt \hl{help}}\hl{ \_\_\_\_\_} in Stata
+	\item Google for official and unofficial Stata help online
+	\item Browse the Stata menus and help manual in the program. Point-and-click a command you forgot, then save the code.
+ 	\item Ask a classmate, TA, or Professor. It is often just a matter of finding the right terminology.
+	\end{itemize}
+\item Stay organized!
+	\begin{itemize}
+	\item Remember to always set your working directory, and keep it organized with subfolders if appropriate.
+	\item Include annotations in your DO files, by beginning a line with an asterisk: \newline{\tt \hl{*this line is a comment}} \newline or by {\tt \hl{/*bracketing an entire section with star-slash, like this. No matter how many lines, it will all be commented out and Stata will ignore those lines or parts of lines when running code. Stata will not, however, insert line-breaks automatically, so you need to hit enter if a line is too long.*/}}
+	\item Three back slashes like so {\tt \hl{///}} \newline tells Stata to continue reading the next line of code as one continuous line. This is useful for keeping long sections of code visible on the screen.
+	\end{itemize}
+\item Be careful of your syntax!
+	\begin{itemize}
+	\item Most Stata code uses the following syntax, although not each section is required:\newline
+	{\tt \hl{by var1: command var2 var3 var4 in 100-150 if ///}} \newline
+	{\tt \hl{var3==3, options}}
+		\end{itemize}
+\item Common symbols include:
+	\begin{itemize}
+	\item \hl{$=$} or \hl{$==$} (equals): {\it different uses you shall see}
+	\item \hl{$>=$} (greater than or equal to)
+	\item \hl{$>$} (greater than)
+	\item \hl{$<=$} (less than or equal to)
+	\item \hl{$<$} (less than)
+	\item \hl{$\sim=$} or  \hl{$!=$} (not equal to): {\it equivalent}
+	\item \hl{$|$} (or)
+	\item \hl{$\&$} (and)
+	\end{itemize}
+\item Working on multiple computers with different file paths? Or have something you want to run just in case, but not have Stata stop? Try the {\tt \hl{capture}} command. \sidenote{{\tt \hl{capture}} tells Stata to keep on running the do file, even if the command returns nothing or an error message. {\tt \hl{noisily}} tells Stata to display output including error messages. For example, it can check multiple working directories and only change to the one that exists, or close a log file if one is open.}\\
+\smallskip
+\noindent e.g.,\\ 
+\noindent	{\tt \hl{capture noisily cd "/Users/nreith/Dropbox/Projects/"\\
+\noindent	capture noisily	cd "/Volumes/Disk2/Dropbox/Projects/"\\
+\noindent	capture noisily cd "T:/Projects"}}\\
+\smallskip
+\noindent or,\\
+\noindent {\tt \hl{capture noisily log close}}
+\end{itemize}
+
+\newpage
+\section{Accessing Stata Outside of Lab}
+There are several ways students can access Stata for use outside of class time.
+\begin{itemize}
+	\item On-campus computer labs, including classrooms can be used when not in session.
+	\item A student license for Stata may be purchased for six months, one year, or perpetual home use on your own computer. For details, see: \url{https://www.stata.com/order/new/edu/gradplans/}
+	\item PRC computer labs on the second floor of CLA may be used by students affiliated with the Population Research Center.
+	\item Students affiliated with the PRC also can get access to the PRC Stats Server with Stata 14. For details, see: \url{http://www.utexas.edu/cola/prc/for-affiliates/computing-services/stats-server.php}
+	\item Students unaffiliated with the PRC have access to an older server provided by the UT Division of Statistics. For details, see: \url{https://stat.utexas.edu/consulting/stat-apps-server} \sidenote{NOTE: This method is only recommended as a last resort, because the server is older (MS Server 2003) and only has an older version of Stata 12. Stata 12 is sufficient for many of our analyses, but there are limitations, compatibility issues, and  possible coding changes in newer versions.}
+	\item There are other methods of obtaining software are discouraged by the University, but might be revealed by the grapevine.
+\end{itemize}
+
+\newpage
+\section{Lab 1 Coding Assignment}
+\subsection{Setup \protect\sidenote{NOTE: It is suggested to use a USB for lab assignments, and to back up your USB regularly in case it is lost or corrupted.)}}
+\begin{enumerate}[leftmargin=.5in]
+	\item Log into lab computer, and open Stata
+	\item Log into Canvas and download lab materials.
+	\item In Stata command line, type {\tt \hl{pwd}} to locate working directory.
+	\item Click on "file menu" and change working directory to your USB.
+	\item Note the text that appears in Stata's output window.
+\end{enumerate}
+
+\subsection{Setting DO and LOG files \protect\sidenote{NOTE: For the remainder of the semester, we will be completing our lab assignments in DO files to save our annotated code, and saving output to a log file. Graphs and Tables will be saved to our working directory. All these should be assembled in one orderly document for the final portfolio.}}
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{5}
+	\item Click "Do-File Editor" icon
+	\item Click "save" from the file menu to save your {\tt .do} file to working directory, giving it a descriptive name like {\tt \hl{Lab1.do}}
+	\item Setup the first few lines of your {\tt \hl{.do}} file like this:
+\end{enumerate}
+
+\noindent {\tt \hl{clear all}} \sidenote{Clears memory.} \\
+\noindent {\tt \hl{set more off, permanently}} \sidenote{Turns off scroll breaks.}\\
+\noindent {\tt \hl{cd "F:/Lab1/"}}\\
+\noindent {\tt \hl{capture noisily log close}} \sidenote{Just in case a log was open from a previous run. See sidenote \#2 on {\tt \hl{capture noisily}}}. \\
+\noindent {\tt \hl{log using "F:/Lab1/Lab1LOG.smcl", smcl replace}} \sidenote{NOTE: You will want to log all of your lab assignments, because this provides a record of both inputs (code) and output (results). If you properly comment your {\tt \hl{.do}} file and complete the assignment correctly, you can just copy and paste your log into Word, and add charts, graphs and tables as needed.\bigskip
+\newline There are a couple of options to consider with logs:
+\newline 1) An {\tt \hl{.smcl}} file maintains proper formatting, but can only be opened with Stata, whereas saving the log as a {\tt \hl{.txt}} file makes it portable and universal, but it loses all formatting. If you don't have access to Stata at home, you should save it as a {\tt .txt} so you can open them on your computer. \newline 2) You may choose to {\tt \hl{replace}} or alternatively {\tt \hl{append}} your log file, depending on whether you wish to keep all previous runs, or just the latest run of your code.}
+
+\bigskip
+\hrule
+\bigskip
+
+\subsection{Importing Data:}
+Though there are dedicated programs such as STAT TRANSFER for converting datasets, Stata is capable of importing or exporting in a number of common formats. You'll need this, since most datasets are not published in Stata format.
+
+As with most things in STATA, there are multiple ways to import data, which include:
+
+\begin{itemize}
+\item Manually entering the data through the command line or in matrix language.\item Copying and pasting the data from a table (such as excel) into the data editor, provided rows and columns are in the correct direction.\item Importing using the point-and-click menu to choose the correct format and browse to the file.\item Importing via the command line or a do file with a line of code specifying the file type and location.
+\item Double-clicking a .dta file, assuming program preferences are set in Windows/Mac.\item Dragging and dropping a file onto the output screen or command line.
+\end{itemize}
+In general, you will find it easiest to import the first time with the point-and-click menu, or drag and drop. But thereafter, you should save the code that STATA writes and use this in your do file.
+For the lab today and next week (Lab Assignment 1), the data has already been provided in STATA format. The name of the STATA dataset is: {\tt \hl{Lab1data.dta}}
+
+For more help on how to import data into STATA, check some websites such as these:
+
+\begin{itemize}
+\item \url{http://www.usc.edu/its/stats/stata/import_excel.html}\item \url{http://www.stata.com/support/faqs/data/newexcel.html}\item \url{http://www.wiwi.uni-muenster.de/ioeb/Downloads/Forschen/Pfaff/Introduction_to_Stata_with_50+_Basic_Commands.pdf}\end{itemize}\subsection{Stata Data Cleaning, Coding \& Organization}Now, on to the assignment!
+
+The variables included in this dataset contain within them a number of typical issues that you will often see in "raw" or "dirty" data. This handout will provide hints on the issues in question and the commands you can use, as well as samples of code to address these issues.  You will work through some of it on your own.
+
+The dataset is a subset of variables extracted from the World Values Survey, a publicly available dataset with survey questions in numerous countries and five waves from 1981 through 2008.
+\url{http://www.wvsevsdb.com/wvs/WVSIntegratedEVSWVSvariables.jsp?Idioma=I}
+
+Let's get started:
+
+\medskip
+\noindent{\bf Exploring the dataset:}
+\medskip
+
+There are a few useful commands for getting a quick look at your dataset and variables. These include:
+\begin{itemize}
+	\item {\tt \hl{desc}} or {\tt \hl{describe var}} -- Descriptive Info about the variable	\item {\tt \hl{tab}} or {\tt \hl{tabulate var}} -- A one-way table of frequencies	\item {\tt \hl{tab}} or {\tt \hl{tabulate var1 var2}} -- A two-way table of frequencies 	\item {\tt \hl{sum}} or {\tt \hl{summarize var}} -- A list of summary statistics (use the option {\tt \hl{, d}} for details.)	\item {\tt \hl{tabstats var}} -- A table of summary statistics
+\end{itemize}
+
+\bigskip
+\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{8}
+	\item Use the {\tt \hl{describe}} command above to get an overview of the dataset. How many observations do we have? How many variables?
+	\item Next, {\tt \hl{tabulate}} a few variables: tab s002 for example. How many waves are in this survey? How many observations are in each wave? {\tt \hl{tab}} other variables to answer: How many countries? Note how many observations per country.  How many religious categories (religcat)?
+	\item Now {\tt \hl{tab x003}} (age) and then {\tt \hl{sum x003, d}} (age). What is the mean age of our respondents? The Standard Deviation?
+\end{enumerate}
+
+\bigskip\hrule
+\bigskip
+
+\noindent{\bf Tabbing the Volunteering Variables (a081-a096):}
+\medskipWe will be working with variables that measure volunteering.  Let us check if the relevant variables are available in both waves.Sort the data by wave, in order to be able to explore this variable better.\\\bigskip\noindent {\tt \hl{sort s002}}\\\bigskip
+Now, we can check the "volunteer" variables by wave with {\tt \hl{tab}}, and the {\tt \hl{by}} clause.
+
+\bigskip\noindent{\tt \hl{by s002: tab a081, m}} \sidenote{We add the {\tt \hl{, m}} option here, which is an abbreviation of "missing" to include missing observations in the tabulation.}\\
+
+\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{11}	\item Now you try a few more. Using the same code, tab some of the other volunteer variables (a081-a096) by wave.	\item What do you conclude? If we were to choose just one of the two waves (4 or 5) to work with, which should it be?
+\end{enumerate}\bigskip\hrule
+\bigskip
+\noindent{\bf Dropping/Keeping Observations by Wave:}\medskip
+In order to keep observations, we simply use the keep command, carefully specifying which groups to keep with the if clause and {\tt \hl{ | }} or {\tt \hl{ \& }} to separate multiple groups.\\
+
+\bigskip\noindent{\tt \hl{keep if s002==x}} \sidenote{Note the use of the double equal sign above ({\tt \hl{==}} rather than {\tt \hl{=}}).}\\\bigskip
+
+In this case, we only wish to keep one of two waves. Using the code above, replace "x" with the number of the wave you have decided to keep based on the preceding tab you performed. Then tab the waves variable again to make sure it worked.\medskip\noindent{\bf Dropping/Keeping Variables:}\medskip
+Now that we are finished keeping only the wave we want, we can look at some other variables to drop. Today we will focus on individual level variables, so we can drop some of the survey variables that are extraneous. These are {\tt \hl{s001}} (study) and {\tt \hl{s008}} (Interview number).This time keep probably doesn't make sense, since there are only a few things we are dropping and many we are keeping.The drop command follows the same syntax as the keep command, but this time we don't need any if clauses. We just write:
+\bigskip\noindent{\tt \hl{drop var1 var2 var3}}\\
+\bigskip
+
+\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{13}	\item Go ahead and write a bit of code to drop the two variables mentioned: {\tt \hl{s001}} and {\tt \hl{s008}}. Check the variables window and the output window to confirm it worked.
+\end{enumerate}
+
+\bigskip\hrule
+\bigskip
+\subsection{\bf Combining/Generating Variabls}
+
+\medskip
+\noindent{\bf Coding volunteering:}\medskip
+Now that we have trimmed our dataset a bit, we need to begin thinking about how we would like to code some of our key variables. Coding should be thoughtful and informed by, or linked to, our theory and the design of our analysis. We  may code variables based on how past researchers have coded them.  But don't assume that previous research has coded a variable optimally.  You may think of a way to code a variable better.The questions {\tt \hl{a081--a096}} ask whether someone did "unpaid work" for the association. The text of the question in the survey is as follows:
+\begin{quote}
+{\em
+Please look carefully at the following list of voluntary organizations and activities and say...\\
+And for which, if any, are you currently doing unpaid voluntary work?\\A081-A096 -- List of Voluntary Organizations\\0 'Not mentioned'\\
+1 'Unpaid Work'}
+\end{quote}
+
+\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{14}
+	\item Consider the wording, original coding and content of this group of questions. Thinking about our ultimate goal of analyzing, suggest some ways these variables might be recoded. \end{enumerate}
+
+\bigskip\hrule
+\bigskip\medskip
+\noindent{\bf Creating a "count" variable:}
+\medskip
+Alone the variables each capture unpaid work for specific types of associations.One way to recode them might be to group them into sub-types of associations such as secular vs. religious, or by thematic areas.For our purposes we are interested in volunteering in general, so we will create a count variable of how many associations a respondent reports doing unpaid work for.For this, we use the {\tt \hl{egen}} command with {\tt \hl{rowtotal}} extension (formerly {\tt \hl{rsum}} in older versions of STATA) and the {\tt \hl{missing}} option to ensure that we account for missing observations as well. The code to include in your do file is below.\bigskip\noindent{\tt \hl{egen volcount = rowtotal (a081-a096), m}}
+\bigskip{\tt \hl{egen}} is one possible command you can use in STATA to create a new variable, and the rowtotal part (previously called "rsum" in older versions of STATA) means that our new variable is equal to the sum of the number of non-zero answers in the group of variables specified for each respondent.With this code, each individual respondent is given a number corresponding to the number of types of organizations for which they volunteer. The missing values generated are for those individuals who did not answer any of the 16 possible questions. \sidenote{Note: For anyone missing only on some of the questions, these missing responses are considered to be zero in our new count variable.}\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{15}
+	\item Type {\tt \hl{help egen}} and take a moment to explore the help documentation for the {\tt \hl{egen}} command. As you can see, {\tt \hl{rowtotal}} is only one of many options that {\tt \hl{egen}} can perform.
+	\item Now {\tt \hl{tab}} the new variable {\tt \hl{volcount}} to see how it looks. What is the "mode" of this distribution?
+	\item Next, summarize the variable with the {\tt \hl{sum}} command. What is the mean number of types of organizations for which people volunteer?
+	\item Lastly, make a "histogram" of the new variable with the command {\tt \hl{hist volcount}} and comment on its distribution visually. Is it skewed? In which direction? What is the range of the distribution from min to max?\end{enumerate}
+
+\bigskip\hrule
+\bigskip
+\medskip
+\noindent{\bf Creating and recoding a dummy variable:}
+\medskipWe could code volunteering differently.  For example, we might decide that, theoretically, what matters is whether someone volunteers for any organization, versus not volunteering at all.  So we could create a dummy variable for {\em "0=does not volunteer"}, and {\em "1=volunteers"}. This time we use the {\tt \hl{gen}} command to create a new variable equal to {\tt \hl{volcount}}, called {\tt \hl{volany}}, and then recode it accordingly.
+
+\bigskip\noindent{\tt \hl{gen volany=volcount\\recode volany 2=1 3=1 4=1 5=1 6=1 7=1 8=1 9=1 10=1 11=1 ///\\
+12=1 13=1 14=1 15=1}}\\\bigskip
+Another way to write this is:
+
+\bigskip\noindent{\tt \hl{recode volany 2/15=1}}\\
+\bigskipThe recode above leaves missing and zero the same as the count variable, but changes all other values to one.
+
+\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{19}
+	\item After running the code above, explore the new {\tt \hl{volany}} variable with the {\tt \hl{tab}} command. What do you conclude about most people from this quick summary? Hint: Pay attention to missing.\end{enumerate}
+
+\bigskip\hrule
+\bigskip
+	\medskip
+\noindent{\bf Cross-Tabs of Volany}
+\medskipA cross-tab is a two-way tabulation that includes two variables. This is performed with the same syntax, for example:
+\bigskip\noindent{\tt \hl{tab s003 volany, row}}
+\bigskip
+
+\noindent to see volunteering by country. The {\tt \hl{row}} option gives us percentages across the rows in addition to numbers of observations. {\tt \hl{col}} would do the same for columns.
+\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{20}
+	\item Using cross-tabs, explore {\tt \hl{volany}} and other variables, one at a time, and try to answer these questions:
+	\item Which country has the highest percentage of people who volunteer? Which has the lowest?
+	\item Given that x001=1 if male and 2 if female, do men or women volunteer more? \end{enumerate}
+
+\bigskip\hrule
+\bigskip
+	\medskip
+\noindent{\bf Dropping original "volunteer" variables:}
+\medskipNow that we are done with creating our {\tt \hl{volcount}} and {\tt \hl{volany}} variables, let's clean up our variables list and get rid of the originals that are cluttering our screen.
+
+\bigskip\noindent{\tt \hl{drop a0*}} \sidenote{We could write this as \\
+{\tt \hl{drop a081-a096}}\\
+but the asterisk in the code tells STATA to perform the command on all variables that begin with that prefix, which in this case are our volunteer questions. If we had variables with a suffix, we would say drop *suffix.}
+\subsection{More Recoding and Reverse Coding:}\medskip
+\noindent{\bf Gender Equality:}
+\medskipWe will now turn to variables {\tt \hl{c001}} (jobs scarce/men have more right), {\tt \hl{d058}} (equal income contribution of husband and wife), {\tt \hl{d059}} (men better political leaders).
+
+\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{23}
+	\item Take a moment to look at the original coding and text of the questions from the World Values Survey Codebook below. Think about measurement and suggest some ideas for how to recode these.
+\end{enumerate}
+
+\bigskip\hrule
+\bigskip
+
+\begin{quote}
+{\emC001.- Jobs scarce: Men should have more right to a job than women\\Do you agree or disagree with the following statements?\\When jobs are scarce, men should have more right to a job than women\\1 'Agree'\\
+2 'Disagree'\\3 'Neither'\\ \medskipD058.- Husband and wife should both contribute to income\\For each of the following statements I read out, can you tell me how much you agree with each. Do you agree strongly, agree, disagree, or disagree strongly?\\
+Both the husband and wife should contribute to household income\\1 'Agree strongly'\\2 'Agree'\\3 'Disagree'\\4 'Strongly disagree'\\ \medskipD059.- Men make better political leaders than women do\\For each of the following statements I read out, can you tell me how much you agree with each. Do you agree strongly, agree, disagree, or disagree strongly?\\On the whole, men make better political leaders than women do\\1 'Agree strongly'\\2 'Agree'\\3 'Disagree'\\4 'Strongly disagree'}\\\end{quote}\medskip
+\noindent{\bf Recoding/Reverse Coding of Variables:}
+\medskipIf you are writing a paper about gender egalitarian values, then you may want to consider reversing the coding of one or more of these variables. But, you have a choice. The first and third questions, {\tt \hl{c001}} and {\tt \hl{d059}} are coded so that misogynist values are coded more highly. The second question, {\tt \hl{d058}} makes a statement about gender equality, with higher values indicating agreement that men and women should both contribute equally to income in the household. Scaling the variables in one direction or the other isn't wrong, but it might be easier for readers of your work to be consistent in the direction of coding. If the paper is largely about gender equality, we may choose to have higher values indicate agreement with gender egalitarianism. But in this case, we will scale them so that higher numbers equate to more patriarchal attitudes.
+
+\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{24}
+	\item Using the sample code on page 10 that we used for {\tt \hl{volany}}, recode {\tt \hl{d059}} to reverse its scale and make it align with {\tt \hl{d058}}. Be sure to make an annotation in your do file to remember later that we have reverse coded this variable, and what the new values represent.
+\end{enumerate}
+
+\bigskip\hrule
+\bigskip
+	We would also like to code {\tt \hl{c001}} so that it corresponds to the direction of the other two. But we must consider another issue: the scale is not currently an increasing ordinal scale.
+
+\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{25}
+	\item Recode {\tt \hl{c001}} so that {\tt \hl{0=disagree}}, {\tt \hl{.5=neither} }and {\tt \hl{1=agree}}. Make a note in your do file.
+\end{enumerate}
+
+\bigskip\hrule
+\bigskip
+	\medskip
+\noindent{\bf Transforming Town Size into "Urban/Rural":}
+\medskipConsider variable {\tt \hl{x049}}, which is town size. The scale of this variable is discrete, not continuous, but contains a number of town size ranges from "under 2000" to "over 500,000". See the original text of the survey question below.
+
+\begin{quote}
+{\emX049.- Size of town\\Size of town:\\1 '2,000 and less'\\2 '2,000-5,000'\\3 '5,000-10,000'\\4 '10,000-20,000/10,000-25,000; EVS81:10M-25M'\\5 '20,000-50,000'\\6 '50,000-100,000'\\7 '100,000-500,000'\\8 '500,000 and more'}\\
+\end{quote}
+\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{26}
+	\item Pause here for a moment and think about this scale. An inexperienced researcher might just throw this variable into an analysis.  It is, after all, an increasing scale.  But do the numbers 1-8 mean anything in terms of population or size of town? What coding solution would you suggest to make this more meaningful as a variable?
+\end{enumerate}
+
+\bigskip\hrule
+\bigskip
+
+There are a number of ways to recode this variable.  We will suggest two.  First, we could recode each value to be the midpoint of the stated range.  
+\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{27}
+	\item First, use the {\tt \hl{gen}} command to create a new variable called townsize. Recode this variable so that each value 1-8 instead corresponds to the midpoint. For example, 2,000-5,000 would be 3,500. For 2,000 or less, code it as 1,000 and for 500,000 or more, code 750,000.
+\end{enumerate}
+
+\bigskip\hrule
+\bigskip
+
+Another way to code the variable would be as a dummy variable -- urban vs. rural. In this case, you would be theoretically more interested in the difference between urban and rural dwellers, not in population per se. Unfortunately, the United Nations does not agree on the precise population size definition of "urban," and countries vary greatly in their own definitions.  So we'll make our own cutoff at 100,000.}
+
+\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{28}
+	\item Using the {\tt \hl{gen}} command you learned above, create a new variable from the original {\tt \hl{x049}} called urban\_setting. Then recode it to be a dummy variable where {\tt \hl{urban=1}}.\end{enumerate}
+
+\bigskip\hrule
+\bigskip
+\medskip
+\noindent{\bf Recoding Religious Attendance:}
+\medskipFrom Durkheim and Weber until today, many sociologists have looked at religion and religiosity as predictors of a number of outcomes. Religious attendance is one of a number of measures of religious commitment.
+
+\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{29}
+	\item Look at the survey question below for the variable {\tt \hl{f028}} and consider its current coding. How would you propose to code it differently so that the time dimension in question is more meaningfully represented?
+\end{enumerate}
+
+\bigskip\hrule
+\bigskip
+
+\begin{quote}
+{\em
+F028.- How often do you attend religious services\\Apart from weddings, funerals and christenings, about how often do you attend religious services these days?\\1 'More than once a week'\\2 'Once a week'\\3 'Once a month'\\4 'Only on special holy days/Christmas/Easter days'\\5 'Other specific holy days'\\6 'Once a year'\\7 'Less often'\\8 'Never practically never'}\\
+\end{quote}If we think about the time dimension of religious attendance, the maximum possible might be daily and the least would be never. Since there are 365 days in a year, we can code the variable according to the number of days of attendance.
+
+\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{30}
+	\item Create a new variable from {\tt \hl{f028}} with {\tt \hl{gen}} called\\
+	{\tt \hl{days\_relig\_service}} and recode it so that {\tt \hl{0=never}}, {\tt \hl{.5=less than once a year}}, {\tt \hl{1=once a year}}, {\tt \hl{2=special holy days}}, {\tt \hl{4=other specific holy days}}, {\tt \hl{12=once a month}, {\tt \hl{52=once a week}}, and {\tt \hl{104=more than once a week}}.\end{enumerate}
+
+\bigskip\hrule
+\bigskip
+\subsection{Renaming \& Labelling Variables and Values:}This final part covers basic coding techniques to rename, reorganize, and label your variables.
+
+\medskip
+\noindent{\bf Renaming variables}
+\medskipThere are several ways to rename variables in STATA.
+
+\begin{itemize}	\item The least efficient is with the variable manager through clicking and manually changing the names of variables one at a time.
+	\item The most common is with the {\tt \hl{ren}} or {\tt \hl{rename}} command, which renames one variable.
+	\item But when working with a lot of data, it is often useful to rename multiple variables at the same time by using the {\tt \hl{ren}} command with parentheses.\end{itemize}
+
+\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{31}
+	\item Run this code to rename one variable.\\
+\medskip
+\noindent {\tt \hl{ren x001 gender}}\\
+\medskip	\item Then try it again for at least one other variable.
+	\item Then try this code to rename multiple variables.\\
+\medskip
+\noindent{\tt \hl{renames (s003 x003) (country age)}}\\
+\medskip	\item Write another line of code to rename variables {\tt \hl{x007}}, {\tt \hl{x011a}} and {\tt \hl{x047r}}.
+\end{enumerate}
+
+\bigskip\hrule
+\bigskip
+	\medskip
+\noindent{\bf Labeling Variables & Values}
+\medskipThere are two main things to label, 1) Variables, and 2) Values of variables. The comprehensive method.
+If you want to be comprehensive about it, you can give a description of the variable with the variable label, and then give exact labels to each value of the variable. Here is some sample code where we label {\tt \hl{religcat}} with this comprehensive method.
+
+\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{35}
+	\item First, {\tt \hl{tab religcat}} in order to see how the values are currently labeled only with numbers.
+	\item Now, we use {\tt \hl{label var}} to give the variable a name.\\
+\medskip
+\noindent{\tt \hl{label var religcat "denomination"}}\\\medskip	\item Then we define the labels for the values with {\tt \hl{label define}}. I usually use the variable's name with an "l" for label at the end.\\
+\medskip
+\noindent{\tt \hl{label define religcatl 0 "No Religion" 1 "Catholic" 2 "Evangelical" 3 "Protestant" 4 "Orthodox" 5 "Jewish" 6 "Muslim" 7 "Hindu" 8 "Buddhist" 9 "Other"}}\\	\item And finally, we attach those new value labels to our variable with label values.\\
+\medskip
+\noindent{\tt \hl{label values religcat religcatl}}\\
+\medskip
+	\item Now, {\tt \hl{tab religcat}} again in order to see the change with the labels. \sidenote{NOTE: For future reference, if variable values DO HAVE labels, and you would like to view the variable without them, you can always type the {\tt \hl{, no lab}} option when performing a tab. For example,\\
+		\smallskip {\tt \hl{tab religcat, nolab}}\\
+		\smallskip
+		shows the numbers only.}
+	\item Next, {\tt \hl{tab X007}} (or whatever you have now renamed it above) to see the current non-labeled values for Marital Status. Then, using the technique above, create labels for Marital Status from the original question below, and assign them to the variable. Tab it again to verify that your changes were successful.
+\end{enumerate}
+
+\bigskip\hrule
+\bigskip
+	\begin{quote}
+{\emX007.- Marital status\\Are you currently ...\\1 'Married'\\2 'Living together as married'\\3 'Divorced'\\4 'Separated'\\5 'Widowed'\\6 'Single/Never married'\\7 'Divorced, Separated or Widow'\\8 'Living apart but steady relation (married,cohabitation)'}\\
+\end{quote}\medskip
+\noindent{\bf The Short-Cut Method}
+\medskipPersonally, I like the above comprehensive method because I'm a bit of a perfectionist and like to see everything neatly labeled. But not everyone does and there are times when you need to save time in coding. The short-cut method is to skip labeling values and instead of having a description for a variable label, we put a note on the coding.
+
+\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{41}
+	\item For example, try this code to recode gender to 0,1 instead of 1,2 and label it.\\
+\medskip\noindent{\tt \hl{recode gender 1=0 2=1}}\\\noindent{\tt \hl{label var gender "0=male, 1=female"}}\\\end{enumerate}
+
+\bigskip\hrule
+\bigskip
+\medskip
+\noindent{\bf Compressing and Alphabetizing:}
+\medskip
+
+Here are some final things to do with your newly recoded dataset.
+
+\bigskip\hrule
+\bigskip
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{42}
+	\item After all of this recoding, renaming, and labeling of values and variables, please type two small commands in order to finalize our organization of the dataset.\\
+\medskip\noindent{\tt \hl{compress}} \sidenote{This stores all variables in their smallest possible form without losing data and helps keep our dataset footprint small, especially after we have created a number of new variables.}\\\noindent{\tt \hl{aorder}} \sidenote{This puts all of your variables in alphabetical order.}\\\end{enumerate}
+
+\bigskip\hrule
+\bigskip\subsection{LAST SECTION! YAY!... PUTTING IT ALL TOGETHER}By now, you are all quite proficient coders and have a nicely cleaned up, recoded, organized, named, and labeled dataset.
+In the following lab sessions we will be delving a bit more into analysis, but for now we will leave you with a few exploratory questions that you can accomplish with the skills you already have. Please think about these and we can discuss them during the beginning of the next lab session.Explore your newly cleaned dataset using some {\tt \hl{tab}} and {\tt \hl{sum}} commands on various combinations of variables, with {\tt \hl{by}} and {\tt \hl{if}} clauses.
+
+\begin{enumerate}[leftmargin=.5in]
+\setcounter{enumi}{43}
+	\item Of all of the categories of religion (including "No Religion" and excluding "missing"), which group has the highest percentage of members who volunteer? Which group has the lowest?
+	\item On the three gender questions, compare men only, by country. In which country do men have the most patriarchal views? In which country do they most strongly support gender equality?
+	\item Earlier, you labeled marital status. But would you use this variable as it is currently coded?  Think about how you might recode this variable.  And how might your coding choice depend on your research question?  For example, how might you code this variable if "mental health" was your outcome?  What if "trust in others" was your outcome?
+	\item Finally, end your session with the following commands to close your log and save the new data: \sidenote{NOTE: Now that you have perfected all of your code in the DO file, and have made sure to also save your do file, if you wish, you can run it again from the beginning in order to produce a clean log without all of the error messages that you may have gotten while experimenting the first time.}\\
+\medskip\noindent{\tt \hl{save "Lab1Data\_Revised.dta"}}\\
+	\end{enumerate}
+
+\end{document}

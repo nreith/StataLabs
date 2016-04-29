@@ -1,0 +1,86 @@
+% Format :  Latex2e
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{boxedminipage}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{verbatim}
+%\documentstyle{article}
+\setlength{\oddsidemargin}{0.in} \setlength{\evensidemargin}{0.in}
+\setlength{\textwidth}{6.50in} \setlength{\topmargin}{-.50in}
+\setlength{\textheight}{9in} \setlength{\headheight}{.1in}
+\setlength{\headsep}{.3in} \setlength{\rightskip}{0pt plus .5fil}
+\usepackage{pdfpages}
+
+\begin{document}
+\restylefloat{table}
+\thispagestyle{empty}
+\pagestyle{plain}
+%
+\begin{center}
+{\bf Tips N' Tricks: \\ 
+Reproducible Research:\\
+Literate Programming and Dynamic Documents  in Stata}
+\end{center}
+
+\noindent Building on the last Tips N' Tricks document about Stata terminal or batch mode, and integration of external programming languages into Stata code and vice versa, this topic is about how to produce ``dynamic documents", aimed at ``reproducible research", using ``literate programming'' in Stata. Essentially, the idea is that you can have one main file (with possible sub-files) that includes text, code, images (charts/graphs/tables), and when run, produces a final, beautifully formatted document (.html, .doc, .pdf, .tex, etc.) which is publication quality, or nearly-so. Actually writing articles that integrate analyses and write-up is one possible use. Another possible use is simply to better integrate code and comments in a presentable way, especially for non-programmers like collaborators and advisors, who may review your notes. In this way, you can display only the underlying code you wish, hiding the more gory bits, and wrap it in well-formatted text. This type of dynamic document/reproducible research is quite common and popular in hard sciences, but less so in the social sciences.
+
+\section*{Definitions}
+
+These three concepts (literate programming, dynamic documents, and reproducible research) are closely related. Here are some definitions:
+
+\begin{quote}
+{\bf Literate programming} is an approach to programming introduced by Donald Knuth in which a program is given as an explanation of the program logic in a natural language, such as English, interspersed with snippets of macros and traditional source code, from which a compilable source code can be generated.\footnote{\url{https://en.wikipedia.org/wiki/Literate_programming}}
+\end{quote}
+
+\begin{quote}
+{\bf A living document or dynamic document} is a document that is continually edited and updated. A simple example of a living document is an article in Wikipedia, an online encyclopedia that permits anyone to freely edit its articles, in contrast to ``dead'' or ``static'' documents, such as an article in a single edition of the Encyclopædia Britannica.\footnote{\url{https://en.wikipedia.org/wiki/Living_document}}
+\end{quote}
+
+\begin{quote}
+{\bf Reproducibility} is the ability of an entire experiment or study to be duplicated, either by the same researcher or by someone else working independently. Reproducing an experiment is called replicating it. Reproducibility is one of the main principles of the scientific method.\\
+\\
+The term {\bf reproducible research} refers to the idea that the ultimate product of academic research is the paper along with the full computational environment used to produce the results in the paper such as the code, data, etc. that can be used to reproduce the results and create new work based on the research.\footnote{\url{https://en.wikipedia.org/wiki/Reproducibility}}
+\end{quote}
+
+\newpage
+\section*{Advantages}
+
+\noindent So what are some of the advantages?
+
+\begin{enumerate}
+\item All-in-one: Clean, readable annotated, analyses with integrated graphics
+\item Updates: Automatically updated text/graphics/tables when underlying analyses change
+\item Workflow: Keeps text formatting/fiddling to a minimum
+\item Reproducibility: From dirty data to final draft
+\item Correctness: Re-run analyses to ensure consistency
+\item Transparency: Openness in quantitative research.
+\item Open-Source Ethic: Leads to more innovative research.
+\item Extensibility: Easier to modify, extend, reuse, mash-up: the data/analyses for new research
+\item Time: Big investment up front saves time on the back-end
+\item Record: Most importantly, a clear record of every step performed
+\end{enumerate}
+
+\section*{Some Resources}
+
+http://www.stata.com/meeting/germany14/abstracts/materials/de14\_rising.pdf\\
+http://www.stata.com/meeting/italy08/rising\_2008.pdf\\
+http://www.haghish.com/talk/reproducible\_analysis\_using\_stata.php\\
+http://www.haghish.com/talk/reproducible\_report.php
+
+\section*{Some Additional Notes}
+
+\subsection*{Stata, R, Python}
+
+\noindent It should be noted that ``reproducible research'' is still quite limited in Stata, and a bit finicky. But it can still be done. It is currently much more advanced in languages like Python (iPython/Jupyter Notebooks) and R (RMarkdown, Knitr, and Weave).
+
+\subsection*{\LaTeX, HTML, Markdown}
+
+No matter whether you are working in Stata, Python, or R, you will need to master an additional coding language in order to produce ``dynamic documents". This is because Stata/Python/R are programming languages used to perform data manipulations and statistical analyses. But with the proper tools, you can use Markdown/HTML/\LaTeX to wrap nicely formatted text around your code, and insert images. Markdown is the easiest to learn, as it is essentially plain text with a few symbols for bold, underline, headings, etc. HTML is a tad more complex, and more flexible. \LaTeX is a a beast in terms of capabilities and complexity, but you shouldn't be too scared of it. Even though the learning curve is steep, there are many useful templates, and once you have the formatting set, you are pretty much just writing plain text.\\
+\\
+What are you waiting for? Check out the sample .do file for an example of a reproducible / replicable document produced with Stata.
+
+\end{document}
