@@ -11,6 +11,8 @@ I served as a Teaching Assistant for this course three times,
 in Spring 2012 and Spring 2014 with Professor Pamela Paxton,
 and in Spring 2016 with Professor Daniel Powers.
 
+## Table of Contents
+
 These materials follow a progression of increasingly advanced topics
 including:
 
