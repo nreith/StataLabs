@@ -3,15 +3,14 @@
 *** Do File - Lab 1
 *************************************************
 
-	/*
-	Welcome to SOC385L Lab!
-	
-	Some comments throughout provide explanation.
+/*
+Welcome to SOC385L Lab!
 
-	PLEASE go ahead and write your own comments to answer questions,
-	or take notes for future reference.
-	*/
+Some comments throughout provide explanation.
 
+PLEASE go ahead and write your own comments to answer questions,
+or take notes for future reference.
+*/
 
 * Setting up DO and LOG files:
 *************************************************
@@ -22,8 +21,8 @@ clear all
 *Turns off automatic scroll breaks
 set more off, permanently 		
 
-*Be sure to change the directory below.
-cd "/Volumes/Disk1/Dropbox/Academic/TAing/SOC385L Spring 2016/Labs/Lab1/"
+*Be sure to change the directory below to your current directory.
+cd "/"
 								
 	/*
 	NOTE: Working in multiple locations? Try this code instead -
