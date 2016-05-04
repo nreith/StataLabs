@@ -14,15 +14,15 @@ and in Spring 2016 with Professor Daniel Powers.
 These materials follow a progression of increasingly advanced topics
 including:
 
--Coding and data cleaning
--Measurement and variable creation
--Simple and Multiple OLS Regression
--OLS Assumption Violations and Diagnostics
-  -Outliers and Influential Cases
-  -Heteroskedasticity
-  -Multicollinearity and serial autocorrelation
-  -Fixed and Random Effects Models for Panel Data
-  -Logit and Probit Models for Binary Outcomes
-  -Simple Structural Equation Models
-  -2 and 3 stage least squares
-  -Advanced Tips and Tricks
+  *Coding and data cleaning
+  *Measurement and variable creation
+  *Simple and Multiple OLS Regression
+  *OLS Assumption Violations and Diagnostics
+    *Outliers and Influential Cases
+    *Heteroskedasticity
+    *Multicollinearity and serial autocorrelation
+    *Fixed and Random Effects Models for Panel Data
+    *Logit and Probit Models for Binary Outcomes
+    *Simple Structural Equation Models
+    *2 and 3 stage least squares
+    *Advanced Tips and Tricks
