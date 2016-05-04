@@ -25,6 +25,6 @@ including:
     * Multicollinearity and serial autocorrelation
   * Fixed and Random Effects Models for Panel Data
   * Logit and Probit Models for Binary Outcomes
-  * Simple Structural Equation Models
+  * Simple Simultaneous Equation Models
   * 2 and 3 stage least squares
   * Advanced Tips and Tricks

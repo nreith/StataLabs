@@ -1,8 +1,12 @@
-cap cd "~/Dropbox/Academic/TAing/SOC385L Spring 2016/Labs/Lab5/outliers/"
+
+*************************************************
+*** Do File - Outliers and Influential Cases
+*************************************************
+
+cap cd "~/Dropbox/Git/repositories/StataLabs/3.OutliersInfluential/"
 set more off, permanently
-set scheme s2color
 cap log close
-log using LOG_Lab5_outliers.smcl, replace
+log using outliers.smcl, replace
 
 use http://www.ats.ucla.edu/stat/stata/webbooks/reg/crime, clear
 

@@ -1,21 +1,21 @@
+
 ********************************************************************************
-* Lab 6 - Heteroskedasticity
+* DO File - Heteroskedasticity
 ********************************************************************************
 
 ****************
 *Setup
 ****************
 
-	cap cd "~/Dropbox/Academic/TAing/SOC385L Spring 2016/Labs/Lab6"
+	cap cd "~/Dropbox/Git/repositories/StataLabs/4.Heteroskedasticity/"
 	set more off, permanently
-	set scheme s2color
 	cap log close
-	log using LOG_Lab6_heteroskedasticity.smcl, replace
+	log using heteroskedasticity.smcl, replace
 
 	use http://www.ats.ucla.edu/stat/stata/webbooks/reg/crime, clear
 
 ****************
-*#0 Talk about Hetero/Homo-skedasticity
+*#0 Intro Discussion on Hetero/Homo-skedasticity
 ****************
 		/*Let's talk a bit about the problem of heteroskedasticity.
 		

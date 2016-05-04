@@ -1,16 +1,16 @@
 
 *************************************************
-*** Do File - Lab 1
+*** Do File - Intro to Stata Coding
 *************************************************
 
-/*
-Welcome to SOC385L Lab!
+	/*
+	Welcome to SOC385L Lab!
 
-Some comments throughout provide explanation.
+	Some comments throughout provide explanation.
 
-PLEASE go ahead and write your own comments to answer questions,
-or take notes for future reference.
-*/
+	PLEASE go ahead and write your own comments to answer questions,
+	or take notes for future reference.
+	*/
 
 * Setting up DO and LOG files:
 *************************************************
@@ -22,7 +22,7 @@ clear all
 set more off, permanently 		
 
 *Be sure to change the directory below to your current directory.
-cd "/"
+cd "~/Dropbox/Git/repositories/StataLabs/1.IntroToStataCoding/"
 								
 	/*
 	NOTE: Working in multiple locations? Try this code instead -
@@ -34,13 +34,13 @@ cd "/"
 capture noisily log close
 
 *Log input and output
-log using "Lab1LOG.smcl", smcl replace
+log using "intro.smcl", smcl replace
 
 
 *Importing/Using Data:
 *************************************************
 
-use "lab1data.dta", clear		/*the ", clear" option here is redundant but 
+use "intro.dta", clear		/*the ", clear" option here is redundant but 
 								shows you that you can also do it this way.*/
 
 * Exploring the Dataset:

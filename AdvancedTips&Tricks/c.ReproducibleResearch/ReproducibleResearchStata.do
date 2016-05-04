@@ -1,4 +1,6 @@
-*Reproducible Research with Stata
+********************************************************************************
+* DO File - Reproducible Research with Stata
+********************************************************************************
 
 ********************************************************************************
 *Setting up the Working Directory, Line Width, Log File, and other options

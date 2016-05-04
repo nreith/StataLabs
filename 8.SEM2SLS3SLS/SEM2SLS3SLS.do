@@ -1,13 +1,16 @@
-*Do File for Lab 8 - Simultaneous Equations:
-*Nonrecursive Model with Instrumental Variables
+********************************************************************************
+* DO File - Simultaneous Equations & 2/3 stage least squares
+********************************************************************************
 
+* Setup
+********************************************************************************
 clear all
+cap cd "~/Dropbox/Git/repositories/StataLabs/8.SEM2SLS3SLS/"
+set more off, permanently
+cap log close
+log using sem2sls3sls.smcl, replace
 
-cd "C:\Dropbox\UT\TAing\Sociology 385L-SSC 385\Labs\Lab8"
-
-use "Lab8.dta", clear
-
-set more off
+use "sem.dta", clear
 
 *******************************************************************
 
@@ -193,3 +196,4 @@ AIC and BIC. */
 reg3 (civpart intprtrst educ babies tvhours) (intprtrst civpart educ burglary pardiv16), first
 estat ic
 
+log close

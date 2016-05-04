@@ -1,14 +1,15 @@
-*Autocorrelation Lab
+********************************************************************************
+* DO File - Multicollinearity and Serial Autocorrelation
+********************************************************************************
 
 ********************************************************************************
 * SETUP
 ********************************************************************************
 
-cap cd "~/Dropbox/Academic/TAing/SOC385L Spring 2016/Labs/Lab7/"
+cap cd "~/Dropbox/Git/repositories/StataLabs/5.Multicollinearity&Autocorrelation/"
 set more off, permanently
-set scheme s2color
 cap log close
-log using LOG_Lab7_autocorrelation.smcl, replace
+log using multicol_autocorr.smcl, replace
 
 ********************************************************************************
 * TRAFFIC DATA
@@ -69,33 +70,33 @@ for each predictor in the model.
 Dropping a variable from a regression due to high multicollinearity causes
 biais in two ways:
 
-a) Ommitted Variable Biais
+	a) Ommitted Variable Biais
 
-"In statistics, omitted-variable bias (OVB) occurs when a model is created 
-which incorrectly leaves out one or more important factors. The "bias" is 
-created when the model compensates for the missing factor by over- or 
-underestimating the effect of one of the other factors.
+		"In statistics, omitted-variable bias (OVB) occurs when a model is created 
+		which incorrectly leaves out one or more important factors. The "bias" is 
+		created when the model compensates for the missing factor by over- or 
+		underestimating the effect of one of the other factors.
 
-More specifically, OVB is the bias that appears in the estimates of parameters 
-in a regression analysis, when the assumed specification is incorrect in that 
-it omits an independent variable that is correlated with both the dependent 
-variable and one or more included independent variables."
+		More specifically, OVB is the bias that appears in the estimates of parameters 
+		in a regression analysis, when the assumed specification is incorrect in that 
+		it omits an independent variable that is correlated with both the dependent 
+		variable and one or more included independent variables."
 
-From: https://en.wikipedia.org/wiki/Omitted-variable_bias
+		From: https://en.wikipedia.org/wiki/Omitted-variable_bias
 
-b) Although it seems to fix the assumption of "no multicollinearity", it violates
-another assumption of "independent errors", namely that the "error term is
-independently distributed and not correlated... i.e. no correlation between
-observations of the Dependent Variable."
+	b) Although it seems to fix the assumption of "no multicollinearity", it violates
+	another assumption of "independent errors", namely that the "error term is
+	independently distributed and not correlated... i.e. no correlation between
+	observations of the Dependent Variable."
 
-Because we know the ommitted variable is significantly correlated with Y,
-and is now in the error term. So the error term has a known correlation with Y.
+		Because we know the ommitted variable is significantly correlated with Y,
+		and is now in the error term. So the error term has a known correlation with Y.
 
-This may be two different ways to think of the same thing. The bottom line:
-DON'T DROP VARIABLES DUE TO MULTICOLLINEARITY, UNLESS IT IS AN IDENTICAL VARIABLE
-DUE TO A KNOWN CODING MISTAKE.
+		This may be two different ways to think of the same thing. The bottom line:
+		DON'T DROP VARIABLES DUE TO MULTICOLLINEARITY, UNLESS IT IS AN IDENTICAL VARIABLE
+		DUE TO A KNOWN CODING MISTAKE.
 
-Ven diagrams, and explanation.
+		Ven diagrams, and explanation.
 
 CONCEPTUAL REVIEW: (from slide 22 of CH 13 slides) What to do:
 	1. Nothing
@@ -103,7 +104,8 @@ CONCEPTUAL REVIEW: (from slide 22 of CH 13 slides) What to do:
 	3. Fancy Bayesian techniques, ridge regression, etc.
 	4. Drop the offending variable (DO NOT DO THIS!!! WHY?)
 		*Sounds like possible exam question.
-Then on to autocorrelation.
+
+		Then on to autocorrelation.
 */
 
 ********************************************************************************
@@ -235,7 +237,13 @@ To interpret, we need to check the durbin-watson table of d distribution
 using a table of critical upper and lower bounds, we see that we are in 
 the zone of indecision.
 
-SO LET'S LOOK AT THE PDF I INCLUDED.
+See Durbin-Watson Tables in this pdf:
+
+http://www.dm.unibo.it/~simoncin/Durbin_Watson_tables.pdf
+
+And the Zones in this powerpoint, on slide 3:
+
+https://goo.gl/hrW9fz 
 
 The original Durbin-Watson test statistic is rather complicated, but commonly
 used, so it is worth understanding. Instead, we can also run the alternative

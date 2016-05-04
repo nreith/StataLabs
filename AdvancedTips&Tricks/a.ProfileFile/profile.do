@@ -1,9 +1,10 @@
-*CREATING A STATA PROFILE FILE:
+********************************************************************************
+* DO File - Stata Profile Files
 ********************************************************************************
 
 /*
 CAUTION: Do not use a Stata profile.do file like this on a public
-computer or server, such as the PRC.
+computer or server, where you might change settings for other users.
 
 See here: http://www.stata.com/support/faqs/programming/profile-do-file/
 

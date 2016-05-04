@@ -1,16 +1,21 @@
-*Lab Assignment 7 DO File
+********************************************************************************
+* DO File - Logit and Probit Models for Binary Outcomes
+********************************************************************************
 
+* Setup
+********************************************************************************
 clear all
+cap cd "~/Dropbox/Git/repositories/StataLabs/7.Logit&ProbitBinaryOutcomes/"
+set more off, permanently
+cap log close
+log using logitprobit.smcl, replace
 
-cd "D:\Dropbox\UT\TAing\Sociology 385L-SSC 385\Labs\Lab7"
-
-log using Lab7LOG, smcl replace
-
-use "binlfp2.dta"
+use "binlfp2.dta", clear
 
 describe
 
 *#1
+********************************************************************************
 
 logit lfp k5 k618 age wc hc lwg inc
 
@@ -42,6 +47,7 @@ disp .6046931/.3656287
 	the wife.*/
 
 *#2 Now let's get the predicted probabilities
+********************************************************************************
 
 logit lfp k5 k618 age wc hc lwg inc
 
@@ -55,6 +61,7 @@ hist prlogit
 *Notice that there is a predicted probability given for each woman in our dataset.
 
 *#3.1 prvalue
+********************************************************************************
 
 *Let's use the prvalue command to customize the probabilities
 
@@ -77,6 +84,7 @@ prvalue , x(age=35 k5=2 wc=0 hc=0 inc=15) rest(mean)
 *Do some more
 
 *#3.2 prtab
+********************************************************************************
 
 prtab k5, rest(mean)
 
@@ -86,13 +94,15 @@ prtab k5 k618 wc, rest(mean)
 
 *Neato!
 
-*#3.2 prchange
+*#3.3 prchange
+********************************************************************************
 
 prchange k5, help
 
 prchange k5 wc, help
 
 *#4 Now let's talk about an odds ratio interpretation
+********************************************************************************
 
 listcoef, help
 
@@ -107,6 +117,7 @@ disp 1.8307/100
 *the labor force by a factor of .018 (holding all other factors constant)
 
 *#5 Odds ratio percentage change
+********************************************************************************
 
 listcoef, percent help
 
@@ -118,6 +129,4 @@ listcoef, percent help
 *i.e. it could be a big change for the first child, but less for additional children, though
 *the cumulative odds would still be lower.
 
-
-
-
+log close

@@ -1,20 +1,19 @@
-* Lab Assignment 2
+
+*************************************************
+*** Do File - Simple and Multiple Regression
+*** with Measurement and Variable Creation
 *************************************************
 
 * Getting Started:
 *************************************************
 
 clear all
+cap cd "~/Dropbox/Git/repositories/StataLabs/2.SimpleMultipleRegression/"
+set more off, permanently
+cap log close
+log using simplemultiple.smcl, replace
 
-set more off
-
-*cd "/home/nreith/Dropbox/UT/TAing/Sociology 385L-SSC 385/Labs/Lab2/"
-*cd "C:/Dropbox/UT/TAing/Sociology 385L-SSC 385/Labs/Lab2/"
-cd "F:\Lab2"
-
-use "Lab2data.dta"
-
-log using "Lab2.smcl", replace
+use "simplemultiplereg.dta", clear
 
 * Part One: Abortion Variables & Simple Regression
 *************************************************
@@ -498,5 +497,5 @@ reg abcount3 educ lnincome_ind catholic sex black otherrace z2
 /* R-squared went up a tad, but Taurs had no effect! */
 
 
-
+log close
 

@@ -1,14 +1,13 @@
 ********************************************************************************
-* Working with Strings in Stata
+* DO File - Working with Strings in Stata
 ********************************************************************************
 
 ****************
 *Setup
 ****************
 
-	cap cd "~/Dropbox/Academic/TAing/SOC385L Spring 2016/Labs/tipsNtricks/strings/"
+	cap cd "~/Dropbox/Git/repositories/StataLabs/AdvancedTips&Tricks/d.StringManipulation/"
 	set more off, permanently
-	set scheme s2color
 	cap log close
 	log using strings.smcl, replace
 
@@ -334,3 +333,5 @@ gen suffix = substr(wingo, -5, .) // grabs all characters up to postion 5 from l
 ********************************************************************************
 
 *ALL FOR NOW!! HAVE FUN!!
+
+log close

@@ -1,7 +1,16 @@
-*Time-Series Panel Data
-*Fixed and Random Effects
+********************************************************************************
+* DO File - Fixed and Random Effects for Panel Data
+********************************************************************************
 
-* stata has loaded the National Longitudinal Study
+*#0 Setup
+********************************************************************************
+cap cd "~/Dropbox/Git/repositories/StataLabs/6.PanelFixed&RandomEffects/"
+set more off, permanently
+cap log close
+log using panelfixedrandom.smcl, replace
+
+
+* Load National Longitudinal Study data
 webuse nlswork, clear
 
 *#1 Describe Data
@@ -9,10 +18,10 @@ webuse nlswork, clear
 
 desc
 
-*the dataset contains 28,091 ìobservationsî, 
+*the dataset contains 28,091 observations, 
 *which are 4,697 people, each observed, on average, on 6.0 different years. 
 *An observation in our data is a person in a given year. 
-*The dataset contains variable idcode, which identifies the persons ó the i index in x[i,t]. 
+*The dataset contains variable idcode, which identifies the persons in the i index in x[i,t]. 
 *Before fitting the model, we type xtset idcode to tell Stata this. 
 
 *#2 XT Set the Data and take a closer look
@@ -266,3 +275,4 @@ test yr82 yr83 yr84 yr85 yr86 yr87
 	* basic results stay the same
 	* the years are jointly significant
 	
+log close
