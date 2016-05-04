@@ -21,8 +21,8 @@ including:
     * Outliers and Influential Cases
     * Heteroskedasticity
     * Multicollinearity and serial autocorrelation
-    * Fixed and Random Effects Models for Panel Data
-    * Logit and Probit Models for Binary Outcomes
-    * Simple Structural Equation Models
-    * 2 and 3 stage least squares
-    * Advanced Tips and Tricks
+  * Fixed and Random Effects Models for Panel Data
+  * Logit and Probit Models for Binary Outcomes
+  * Simple Structural Equation Models
+  * 2 and 3 stage least squares
+  * Advanced Tips and Tricks
