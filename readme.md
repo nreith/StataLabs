@@ -1,6 +1,6 @@
 # Stata Labs
 
-The materials here are annotated lab assignments I 
+These materials are annotated lab assignments I 
 developed for teaching statistical programming in Stata (Version 13 or above).
 
 These lessons were geared toward PhD students in Sociology 
